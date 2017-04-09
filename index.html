@@ -299,6 +299,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/其它/" itemprop="url" rel="index">
+                    <span itemprop="name">其它</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -326,64 +348,152 @@
       
         
           
-            <h1 id="小米路由器3开启SSH与安装Shadowsocks方法"><a href="#小米路由器3开启SSH与安装Shadowsocks方法" class="headerlink" title="小米路由器3开启SSH与安装Shadowsocks方法"></a>小米路由器3开启SSH与安装Shadowsocks方法</h1><p> 通俗的讲, 这篇文章就是告诉你怎么配置小米路由器3, 使其他设备连接上它发出的WIFi后能翻墙上YouTube等网站.<br>在试过网上多篇教程后总结出来的一个简单粗暴, 便于安装的教程.</p>
-<ul>
-<li><p>教程分三步：</p>
-<ul>
-<li><p>刷指定的开发版rom</p>
-</li>
-<li><p>开启SSH</p>
-</li>
-<li><p>安装Shadowsocks</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="一-刷2-11-20-开发版"><a href="#一-刷2-11-20-开发版" class="headerlink" title="一. 刷2.11.20 开发版"></a>一. 刷2.11.20 开发版</h3><p>已经是此版本系统的直接跳过。</p>
-<ul>
-<li><p>首先确认你的小米路由器3系统版本是否为【2.11.20 开发版】，不是的话请点击下载rom 2.11.20开发版  。</p>
-</li>
-<li><p>进入路由器主页右上角→系统升级→手动升级→选择刚才下载的rom。</p>
-</li>
-</ul>
-<p>ps：刷好后记得设置不要自动升级系统</p>
-<h3 id="二、开启SSH"><a href="#二、开启SSH" class="headerlink" title="二、开启SSH"></a>二、开启SSH</h3><ul>
-<li><p>用浏览器登陆小米路由器后台</p>
-<p>地址栏一般是这样：(如果地址ip不是 192.168.31.1, (如:192.168.2.xxx)  替换为当前显示的ip就行)</p>
-</li>
-</ul>
-<pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/web/home#router
-</code></pre><p>改成如下并回车：</p>
-<pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianbao&amp;encryption=NONE&amp;enctype=NONE&amp;channel=1%3Bnvram%20set%20ssh%5Fen%3D1%3B%20nvram%20commit
-</code></pre><p> 待提示 { 未连接到指定wifi } 之后, 继续：</p>
-<pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianbao&amp;encryption=NONE&amp;enctype=NONE&amp;channel=1%3Bsed%20%2Di%20%22%3Ax%3AN%3As%2Fif%20%5C%5B%2E%2A%5C%3B%20then%5Cn%2E%2Areturn%200%5Cn%2E%2Afi%2F%23tb%2F%3Bb%20x%22%20%2Fetc%2Finit.d%2Fdropbear
-</code></pre><p>待提示 { 未连接到指定wifi } 之后, 继续:</p>
-<pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianbao&amp;encryption=NONE&amp;enctype=NONE&amp;channel=1%3B%2Fetc%2Finit.d%2Fdropbear%20start
-</code></pre><p>待提示 { 未连接到指定wifi } 之后, 继续：</p>
-<pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqsystem/set_name_password?oldPwd=&lt;你当前的后台管理密码&gt;&amp;newPwd=&lt;新密码&gt;
-</code></pre><p>最后一个输入完, 可以看到  {“code”:0}, 证明开启SSH成功。此方法同样适用小米的其他型号路由器（原厂固件）</p>
-<ul>
-<li><p>ps：</p>
-<ul>
-<li><p>最后一步中的——oldPwd=：路由器管理密码，非WIFI密码。</p>
-</li>
-<li><p>建议这两个密码都一样，别修改。待会安装SS要输入的。</p>
-</li>
-<li><p>每执行一步，输入一次地址的时候，不要太着急又输入第二个，等待它加载完毕。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="三、安装Shadowsocks"><a href="#三、安装Shadowsocks" class="headerlink" title="三、安装Shadowsocks"></a>三、安装Shadowsocks</h3><p>此时你可以打开putty或者securecrt使用root和刚刚设置的新密码通过SSH登陆了, 由于博主是mac电脑, 故直接用终端即可</p>
-<p>mac终端是这样连接:</p>
-<ol>
-<li>输入   <code>ssh root@192.168.31.1</code></li>
-<li>输入刚才你设置密码(最后一步中的:newPwd),当出现红框内这样的文字后, 说明进入成功 <img src="/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/image1.png" alt=""></li>
-<li>输入指令        <code>wget http://www.misstar.com/tools/appstore/install.sh -O /tmp/install.sh &amp;&amp; chmod +x /tmp/install.sh &amp;&amp; /tmp/install.sh</code>  然后按任意键继续.待安装完成.  (  若地址失效, 可尝试备用地址 <code>wget http://file.joingit.com/install.sh -O /tmp/install.sh &amp;&amp; chmod +x /tmp/install.sh &amp;&amp; /tmp/install.sh</code> )</li>
-<li>安装完成后, 进入路由器后台, 会发现顶部多了个选项, 点击,  进入插件管理, 下载  科学上网 或者 shadowsocks 插件, 配置相关线路密码即可 <img src="/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/image2.png" alt=""></li>
-</ol>
+          小米路由器3开启SSH与安装Shadowsocks方法 通俗的讲, 这篇文章就是告诉你怎么配置小米路由器3, 使其他设备连接上它发出的WIFi后能翻墙上YouTube等网站.在试过网上多篇教程后总结出来的一个简单粗暴, 便于安装的教程.
+
+教程分三步：
+
+刷指定的开发版rom
+
+开启SSH
+
+安装S
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/01/test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Gaussion Young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Young的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/01/test/" itemprop="url">
+                  test
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-01T12:44:01+08:00">
+                2017-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
 
           
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          test-2Fetc%2Finit.d%2Fdropbear
+待提示 { 未连接到指定wifi } 之后, 继续:
+http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianba
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/01/test/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -461,14 +571,32 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
           
 
           
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>

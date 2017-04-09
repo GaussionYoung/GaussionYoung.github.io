@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2017-04-09T04:28:04.000Z</updated>
+  <updated>2017-04-09T04:58:12.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yoursite.com/2017/04/08/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A83%E5%BC%80%E5%90%AFSSH%E4%B8%8E%E5%AE%89%E8%A3%85Shadowsocks%E6%96%B9%E6%B3%95/"/>
     <id>http://yoursite.com/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/</id>
     <published>2017-04-07T16:00:22.000Z</published>
-    <updated>2017-04-09T04:28:04.000Z</updated>
+    <updated>2017-04-09T04:58:12.000Z</updated>
     <content type="html"><![CDATA[<h1 id="小米路由器3开启SSH与安装Shadowsocks方法"><a href="#小米路由器3开启SSH与安装Shadowsocks方法" class="headerlink" title="小米路由器3开启SSH与安装Shadowsocks方法"></a>小米路由器3开启SSH与安装Shadowsocks方法</h1><p> 通俗的讲, 这篇文章就是告诉你怎么配置小米路由器3, 使其他设备连接上它发出的WIFi后能翻墙上YouTube等网站.<br>在试过网上多篇教程后总结出来的一个简单粗暴, 便于安装的教程.</p>
 <ul>
 <li><p>教程分三步：</p>
@@ -41,17 +41,54 @@
 </li>
 </ul>
 <p>ps：刷好后记得设置不要自动升级系统</p>
-<h3 id="二、开启SSH"><a href="#二、开启SSH" class="headerlink" title="二、开启SSH"></a>二、开启SSH</h3><ul>
-<li><p>用浏览器登陆小米路由器后台</p>
-<p>地址栏一般是这样：(如果地址ip不是 192.168.31.1, (如:192.168.2.xxx)  替换为当前显示的ip就行)</p>
-</li>
-</ul>
+<h3 id="二、开启SSH"><a href="#二、开启SSH" class="headerlink" title="二、开启SSH"></a>二、开启SSH</h3><p>用浏览器登陆小米路由器后台</p>
+<p> 地址栏一般是这样：(如果地址ip不是 192.168.31.1, (如:192.168.2.xxx)  替换为当前显示的ip就行)</p>
 <pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/web/home#router
 </code></pre><p>改成如下并回车：</p>
 <pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianbao&amp;encryption=NONE&amp;enctype=NONE&amp;channel=1%3Bnvram%20set%20ssh%5Fen%3D1%3B%20nvram%20commit
 </code></pre><p> 待提示 { 未连接到指定wifi } 之后, 继续：</p>
 <pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianbao&amp;encryption=NONE&amp;enctype=NONE&amp;channel=1%3Bsed%20%2Di%20%22%3Ax%3AN%3As%2Fif%20%5C%5B%2E%2A%5C%3B%20then%5Cn%2E%2Areturn%200%5Cn%2E%2Afi%2F%23tb%2F%3Bb%20x%22%20%2Fetc%2Finit.d%2Fdropbear
 </code></pre><p>待提示 { 未连接到指定wifi } 之后, 继续:</p>
+<pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianbao&amp;encryption=NONE&amp;enctype=NONE&amp;channel=1%3B%2Fetc%2Finit.d%2Fdropbear%20start
+</code></pre><p>待提示 { 未连接到指定wifi } 之后, 继续：</p>
+<pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqsystem/set_name_password?oldPwd=&lt;你当前的后台管理密码&gt;&amp;newPwd=&lt;新密码&gt;
+</code></pre><p>最后一个输入完, 可以看到  {“code”:0}, 证明开启SSH成功。此方法同样适用小米的其他型号路由器（原厂固件）</p>
+<p>ps：</p>
+<ul>
+<li><p>最后一步中的——oldPwd=：路由器管理密码，非WIFI密码。</p>
+</li>
+<li><p>建议这两个密码都一样，别修改。待会安装SS要输入的。</p>
+</li>
+<li><p>每执行一步，输入一次地址的时候，不要太着急又输入第二个，等待它加载完毕。</p>
+</li>
+</ul>
+<h3 id="三、安装Shadowsocks"><a href="#三、安装Shadowsocks" class="headerlink" title="三、安装Shadowsocks"></a>三、安装Shadowsocks</h3><p>此时你可以打开putty或者securecrt使用root和刚刚设置的新密码通过SSH登陆了, 由于博主是mac电脑, 故直接用终端即可</p>
+<p>mac终端是这样连接:</p>
+<ol>
+<li>输入   <code>ssh root@192.168.31.1</code></li>
+<li>输入刚才你设置密码(最后一步中的:newPwd),当出现红框内这样的文字后, 说明进入成功 <img src="/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/image1.png" alt=""></li>
+<li>输入指令        <code>wget http://www.misstar.com/tools/appstore/install.sh -O /tmp/install.sh &amp;&amp; chmod +x /tmp/install.sh &amp;&amp; /tmp/install.sh</code>  然后按任意键继续.待安装完成.  (  若地址失效, 可尝试备用地址 <code>wget http://file.joingit.com/install.sh -O /tmp/install.sh &amp;&amp; chmod +x /tmp/install.sh &amp;&amp; /tmp/install.sh</code> )</li>
+<li>安装完成后, 进入路由器后台, 会发现顶部多了个选项, 点击,  进入插件管理, 下载  科学上网 或者 shadowsocks 插件, 配置相关线路密码即可 <img src="/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/image2.png" alt=""></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="小米路由器3开启SSH与安装Shadowsocks方法"><a href="#小米路由器3开启SSH与安装Shadowsocks方法" class="headerlink" title="小米路由器3开启SSH与安装Shadowsocks方法"></a>小米路由器]]>
+    </summary>
+    
+      <category term="Shadowsocks" scheme="http://yoursite.com/tags/Shadowsocks/"/>
+    
+      <category term="其它" scheme="http://yoursite.com/categories/%E5%85%B6%E5%AE%83/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[test]]></title>
+    <link href="http://yoursite.com/2017/04/01/test/"/>
+    <id>http://yoursite.com/2017/04/01/test/</id>
+    <published>2017-04-01T04:44:01.000Z</published>
+    <updated>2017-04-09T04:46:31.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1><p>-2Fetc%2Finit.d%2Fdropbear</p>
+<p>待提示 { 未连接到指定wifi } 之后, 继续:</p>
 <pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianbao&amp;encryption=NONE&amp;enctype=NONE&amp;channel=1%3B%2Fetc%2Finit.d%2Fdropbear%20start
 </code></pre><p>待提示 { 未连接到指定wifi } 之后, 继续：</p>
 <pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqsystem/set_name_password?oldPwd=&lt;你当前的后台管理密码&gt;&amp;newPwd=&lt;新密码&gt;
@@ -72,13 +109,14 @@
 <p>mac终端是这样连接:</p>
 <ol>
 <li>输入   <code>ssh root@192.168.31.1</code></li>
-<li>输入刚才你设置密码(最后一步中的:newPwd),当出现红框内这样的文字后, 说明进入成功 <img src="/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/image1.png" alt=""></li>
+<li>输入刚才你设置密码(最后一步中的:newPwd),当出现红框内这样的文字后, 说明进入成功 <img src="/2017/04/01/test/image1.png" alt=""></li>
 <li>输入指令        <code>wget http://www.misstar.com/tools/appstore/install.sh -O /tmp/install.sh &amp;&amp; chmod +x /tmp/install.sh &amp;&amp; /tmp/install.sh</code>  然后按任意键继续.待安装完成.  (  若地址失效, 可尝试备用地址 <code>wget http://file.joingit.com/install.sh -O /tmp/install.sh &amp;&amp; chmod +x /tmp/install.sh &amp;&amp; /tmp/install.sh</code> )</li>
-<li>安装完成后, 进入路由器后台, 会发现顶部多了个选项, 点击,  进入插件管理, 下载  科学上网 或者 shadowsocks 插件, 配置相关线路密码即可 <img src="/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/image2.png" alt=""></li>
+<li>安装完成后, 进入路由器后台, 会发现顶部多了个选项, 点击,  进入插件管理, 下载  科学上网 或者 shadowsocks 插件, 配置相关线路密码即可<a href="小米路由器3开启SSH与安装Shadowsocks方法/image2.png"></a></li>
 </ol>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h1 id="小米路由器3开启SSH与安装Shadowsocks方法"><a href="#小米路由器3开启SSH与安装Shadowsocks方法" class="headerlink" title="小米路由器3开启SSH与安装Shadowsocks方法"></a>小米路由器]]>
+    <![CDATA[<h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1><p>-2Fetc%2Finit.d%2Fdropbear</p>
+<p>待提示 { 未连接到指定wifi } 之后, 继续:</]]>
     </summary>
     
   </entry>

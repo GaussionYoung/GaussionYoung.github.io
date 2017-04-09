@@ -71,12 +71,10 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Shadowsocks," />
 
 
 
-
-  
 
 
   <link rel="alternate" href="/atom.xml" title="Young的博客" type="application/atom+xml" />
@@ -92,7 +90,7 @@
 
 
 <meta name="description" content="小米路由器3开启SSH与安装Shadowsocks方法 通俗的讲, 这篇文章就是告诉你怎么配置小米路由器3, 使其他设备连接上它发出的WIFi后能翻墙上YouTube等网站.在试过网上多篇教程后总结出来的一个简单粗暴, 便于安装的教程.  教程分三步：  刷指定的开发版rom  开启SSH  安装Shadowsocks     一. 刷2.11.20 开发版已经是此版本系统的直接跳过。  首先确认">
-<meta name="keywords">
+<meta name="keywords" content="Shadowsocks">
 <meta property="og:type" content="article">
 <meta property="og:title" content="小米路由器3开启SSH与安装Shadowsocks方法">
 <meta property="og:url" content="http://yoursite.com/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/index.html">
@@ -100,7 +98,7 @@
 <meta property="og:description" content="小米路由器3开启SSH与安装Shadowsocks方法 通俗的讲, 这篇文章就是告诉你怎么配置小米路由器3, 使其他设备连接上它发出的WIFi后能翻墙上YouTube等网站.在试过网上多篇教程后总结出来的一个简单粗暴, 便于安装的教程.  教程分三步：  刷指定的开发版rom  开启SSH  安装Shadowsocks     一. 刷2.11.20 开发版已经是此版本系统的直接跳过。  首先确认">
 <meta property="og:image" content="http://yoursite.com/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/image1.png">
 <meta property="og:image" content="http://yoursite.com/2017/04/08/小米路由器3开启SSH与安装Shadowsocks方法/image2.png">
-<meta property="og:updated_time" content="2017-04-09T04:28:04.000Z">
+<meta property="og:updated_time" content="2017-04-09T04:58:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="小米路由器3开启SSH与安装Shadowsocks方法">
 <meta name="twitter:description" content="小米路由器3开启SSH与安装Shadowsocks方法 通俗的讲, 这篇文章就是告诉你怎么配置小米路由器3, 使其他设备连接上它发出的WIFi后能翻墙上YouTube等网站.在试过网上多篇教程后总结出来的一个简单粗暴, 便于安装的教程.  教程分三步：  刷指定的开发版rom  开启SSH  安装Shadowsocks     一. 刷2.11.20 开发版已经是此版本系统的直接跳过。  首先确认">
@@ -304,6 +302,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/其它/" itemprop="url" rel="index">
+                    <span itemprop="name">其它</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -350,11 +370,8 @@
 </li>
 </ul>
 <p>ps：刷好后记得设置不要自动升级系统</p>
-<h3 id="二、开启SSH"><a href="#二、开启SSH" class="headerlink" title="二、开启SSH"></a>二、开启SSH</h3><ul>
-<li><p>用浏览器登陆小米路由器后台</p>
-<p>地址栏一般是这样：(如果地址ip不是 192.168.31.1, (如:192.168.2.xxx)  替换为当前显示的ip就行)</p>
-</li>
-</ul>
+<h3 id="二、开启SSH"><a href="#二、开启SSH" class="headerlink" title="二、开启SSH"></a>二、开启SSH</h3><p>用浏览器登陆小米路由器后台</p>
+<p> 地址栏一般是这样：(如果地址ip不是 192.168.31.1, (如:192.168.2.xxx)  替换为当前显示的ip就行)</p>
 <pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/web/home#router
 </code></pre><p>改成如下并回车：</p>
 <pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqnetwork/set_wifi_ap?ssid=tianbao&amp;encryption=NONE&amp;enctype=NONE&amp;channel=1%3Bnvram%20set%20ssh%5Fen%3D1%3B%20nvram%20commit
@@ -365,16 +382,13 @@
 </code></pre><p>待提示 { 未连接到指定wifi } 之后, 继续：</p>
 <pre><code>http://192.168.31.1/cgi-bin/luci/;stok=&lt;你的stok值&gt;/api/xqsystem/set_name_password?oldPwd=&lt;你当前的后台管理密码&gt;&amp;newPwd=&lt;新密码&gt;
 </code></pre><p>最后一个输入完, 可以看到  {“code”:0}, 证明开启SSH成功。此方法同样适用小米的其他型号路由器（原厂固件）</p>
-<ul>
-<li><p>ps：</p>
+<p>ps：</p>
 <ul>
 <li><p>最后一步中的——oldPwd=：路由器管理密码，非WIFI密码。</p>
 </li>
 <li><p>建议这两个密码都一样，别修改。待会安装SS要输入的。</p>
 </li>
 <li><p>每执行一步，输入一次地址的时候，不要太着急又输入第二个，等待它加载完毕。</p>
-</li>
-</ul>
 </li>
 </ul>
 <h3 id="三、安装Shadowsocks"><a href="#三、安装Shadowsocks" class="headerlink" title="三、安装Shadowsocks"></a>三、安装Shadowsocks</h3><p>此时你可以打开putty或者securecrt使用root和刚刚设置的新密码通过SSH登陆了, 由于博主是mac电脑, 故直接用终端即可</p>
@@ -412,11 +426,33 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Shadowsocks/" rel="tag"># Shadowsocks</a>
+          
+        </div>
+      
 
       
         
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/01/test/" rel="prev" title="test">
+                test <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -485,14 +521,32 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
           
 
           
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
